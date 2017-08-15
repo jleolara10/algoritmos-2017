@@ -1,0 +1,16 @@
+#include "stdafx.h"
+#include "conio.h"
+#include <iostream>  
+using namespace std;
+
+void main () 
+{int s=0, N;
+do{
+cout<<"ingresar N:";
+cin>>N;
+}while(N<=0);
+for (int i=1;i<=N;i=i+4)
+	s=s+i;
+cout<< "la suma es:" <<s;
+getch();}
+
