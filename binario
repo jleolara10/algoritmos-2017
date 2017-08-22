@@ -1,0 +1,28 @@
+#include"stdafx.h"
+#include <iostream>
+#include"conio.h"
+#include"stdlib.h"
+#include"math.h"
+using namespace std;
+int dec(int x);
+
+void main ()
+{int b, s=0;
+cout<<"\n Ingrese el valor en Binario:  ";
+cin>>b;
+s=dec(b);
+cout<<"\n Elnumero en decimal es: "<< s;
+getch();
+}
+
+int dec(int x)
+{int c=0, s=0, dig;
+while(x>0)
+	{
+	dig=x%10; 
+	s=s+dig*powf(2,c);
+	x=x/10;
+	c++;
+ }
+return(s);
+}
