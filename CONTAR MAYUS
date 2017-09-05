@@ -1,0 +1,36 @@
+//PROBLEMA 3 CONTAR MAYUSCULAS
+
+#include "stdafx.h"
+#include <iostream>
+#include "string"
+#include "conio.h"
+
+using namespace std;
+
+int contarmayus(string cad);
+
+void main()
+{
+	string cad;
+	int d;
+	cout<<"ingrese la cadena"<<endl;
+	getline(cin,cad);
+	d=contarmayus(cad);
+	cout<<"Hay "<<d<<" mayusculas";
+	getch();
+	
+}
+
+
+int contarmayus(string cad){
+	int n,c=0;
+	n=cad.length();
+	for(int i=0;i<n;i++)
+	{
+		if (cad[i]=='A'||cad[i]=='B'||cad[i]=='C'||cad[i]=='D'||cad[i]=='E'||cad[i]=='F'||cad[i]=='G'||cad[i]=='H'||cad[i]=='I'||cad[i]=='J'||cad[i]=='K'||cad[i]=='L'||cad[i]=='M'||cad[i]=='N'||cad[i]=='O'||cad[i]=='P'||cad[i]=='B'||cad[i]=='Q'||cad[i]=='R'||cad[i]=='S'||cad[i]=='T'||cad[i]=='U'||cad[i]=='V'||cad[i]=='W'||cad[i]=='X'||cad[i]=='Y'||cad[i]=='Z')
+		{
+			c++;}
+	}
+	
+		return c;
+}
