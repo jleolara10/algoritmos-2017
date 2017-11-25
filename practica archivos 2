@@ -1,0 +1,681 @@
+#include "stdafx.h"
+#include <iostream>
+#include <string>
+#include "conio.h"
+#define M 10
+using namespace std;
+
+//----------------------ESTRUCTURAS--------------------------------------//
+
+struct tcliente
+{int IDc[M];
+ string nombrec;
+ string apellidoc;
+ string fechac [10];
+ string correoc;
+ int contrasenac;
+ int cont[3];      //numero de intereses
+ int estadoc;
+};
+tcliente registro;
+
+struct tcupones
+{string cupon;
+ int cantidad;
+};
+tcupones cuponeria;
+
+struct tpropietario
+{int IDp[M];
+ int NITp;
+ string establecimientop;
+ string descripcionp;
+ string direccionp;
+ string correop;
+ int telefonop;
+ int contrasenap;
+ int interes;
+ int categoriap;
+ int estadop;
+};
+
+tpropietario registrro;
+
+struct tpagamento
+{string fechapag[10];
+ int pago;
+ int deuda;
+};
+ 
+tpagamento pagar;
+
+struct tgerente
+{int ID;
+ int contrasena;
+};
+
+tgerente administrador;
+
+//-----------------------------FUNCIONES-----------------------------------------//
+void registro_cliente();
+void registro_propietario();
+void inicio_propietario();
+void inicio_cliente();
+void inicio_gerente();
+
+void mostrar_perfil_cliente();
+void modificar_perfil_cliente();
+void borrar_datos_cliente(); 
+void adicionar_datos_cliente();
+void mostrar_interes_cliente(); 
+void modificar_interes_cliente(); 
+void borrar_interes_cliente();
+void mostrar_perfil_propietario();
+void modificar_perfil_propietario(); 
+void borrar_perfil_propietario();
+void pagos_propietario();
+void deudas_propietario();
+void listar_lugares();
+void consultar_lugares();
+void borrar_lugares();
+void listar_usuarios();
+void consultar_usuarios();
+void listar_intereses();
+void modificar_datosintereses();
+void consultar_intereses(); 
+
+//-----------------------------VALIDACIONES-------------------------------------//
+
+bool validarnumeroentero (string X);
+bool verifexisteidcliente(int Y);
+bool verificarCorreo(string correo);
+bool fechanacimiento(string fecha);
+bool ingreso_contrasena(int a, int b);
+bool verifexisteidpopietario(int x);
+bool validar_numeros(int y);
+bool verificar_telefono(int z);
+bool verificarhoy(int dd, int mm, int aa);
+bool validarnombre(string X)
+
+void ValidarFecha();
+int FechaAnho();
+int FechaMes();
+int FechaDia();
+
+//-----------------------------ARCHIVOS----------------------------------------//
+void archivo_cliente()
+{
+	FILE *ptr;
+	ptr = fopen("cliente.dat","wb");
+	fclose(ptr);
+}
+
+void archivo_propietario()
+{
+	FILE *ptr;
+	ptr = fopen("propietario.dat","wb");
+	fclose(ptr);
+}
+
+void archivo_gerente()
+{
+	FILE *ptr;
+	ptr = fopen("gerente.dat","wb");
+	fclose(ptr);
+}
+
+
+//----------------------------MENU PRINCIPAL-----------------------------------//
+
+void main()
+{int opc1, opc2, opc3;
+ cout<<"\n ##############    ################   ###          ###    #########     ";
+ cout<<"\n ###                     ###          ####         ###    ###      ##   ";
+ cout<<"\n ###                     ###          #####        ###    ###       ##  ";
+ cout<<"\n ###                     ###          ### ##       ###    ###        ## ";
+ cout<<"\n ###                     ###          ###  ##      ###    ###         ##";
+ cout<<"\n ##############          ###          ###   ##     ###    ###         ##";
+ cout<<"\n ###                     ###          ###    ##    ###    ###         ##";
+ cout<<"\n ###                     ###          ###     ##   ###    ###        ## ";
+ cout<<"\n ###                     ###          ###      ##  ###    ###       ##  ";
+ cout<<"\n ###                     ###          ###       ## ###    ###      ##   ";
+ cout<<"\n ###               ################   ###        #####    #########     ";
+ cout<<"\n\n\n";
+ cout<<"\n ########      ###                   ###        ###########   ##########   ";
+ cout<<"\n ###    ##     ###                  ## ##       ###           ###          ";
+ cout<<"\n ###     ##    ###                 ##   ##      ###           ###          ";
+ cout<<"\n ###     ##    ###                ##     ##     ###           ###          ";
+ cout<<"\n ###     ##    ###               ##       ##    ###           ###          ";
+ cout<<"\n ###    ##     ###              ##         ##   ###           ##########   ";
+ cout<<"\n #######       ###             ###############  ###           ###          ";
+ cout<<"\n ###           ###             ##           ##  ###           ###          ";
+ cout<<"\n ###           ###             ##           ##  ###           ###          ";
+ cout<<"\n ###           ###             ##           ##  ###           ###          ";
+ cout<<"\n ###           #############   ##           ##  ###########   ##########   ";
+ cout<<"\n\n\n";
+ cout<<"\n\t\t\t        BIENVENIDO/A ";
+ do
+   {cout<<"[1]   Crear cuenta";
+    cout<<"[2]   Iniciar sesion";
+	cout<<"[0]   Salir";
+	cout<<"\n Ingrese una opcion";
+	cin>>opc1;
+	switch(opc1)
+	{case 1:
+	  {do
+	    {cout<<"\n Desea crear una cuenta de cliente, propietario o gerente";
+		  cout<<"[1]  Cliente";
+		  cout<<"[2]  Propietario";
+		  cout<<"[3]  Gerente Fin Place";
+		  cout<<"[0]  Salir";
+		  cin>>opc2;
+		  switch(opc2)
+		    {case 1: registro_cliente(); break;
+			 case 2: registro_propietario(); break;
+			 case 3: registro_gerente(); break;
+			 case 0: cout<<"\n GRACIAS POR USAR LA APP FIND PLACE ;)"; break;
+		    }
+		}while(opc2<0 || opc2>3);
+	  }break;
+	case 2:
+	  {do
+		{cout<<"\n Desea iniciar sesion como cliente, propietario o gerente: ";
+		 cout<<"[1]  Cliente";
+		 cout<<"[2]  Propietario";
+		 cout<<"[3]  Gerente Find Place"
+		 cout<<"[0]  Salir";
+		 cin>>opc2;
+		 switch(opc3)
+		   {case 1: inicio_cliente();break;
+		    case 2: inicio_propietario();break;
+			case 3:inicio_gerente(); break;
+			case 0: cout<<"\n GRACIAS POR USAR LA APP FIND PLACE ;)";break;
+		   }
+		}while(opc3<=0 || opc3>3);
+	  }break;
+	case 3: cout<<"\n GRACIAS POR USAR LA APP FIND PLACE ;)"; break;
+	default: cout<<"\n ERROR"; break;
+	}
+   }while(opc1!=0);
+ getch();
+}
+
+//-------------------------------------FUNCIONES--------------------------------//
+
+void registro_cliente()
+{FILE *ptr;
+ int INT=3;
+ ptr = fopen("cliente.dat","ab");
+ cout<<"\n Ingrese su fecha de nacimiento: ";
+ cin>>registro.fechac[10];
+ if(fechanacimiento(registro.fechac[10])==false)
+   {do
+      {do
+         {cout<< "\n Introduzca su ID: ";
+          cin>>registro.IDc[M];
+	     }while(validarnumeroentero (registro.IDc[M])==true);   
+      }while(verifexisteidpopietario(registro.IDc[M])==true);
+   do
+    {cout << "\n Introduzca su nombre: ";
+     getline(cin,registro.nombrec);
+	}while(verif_solo_letras(registro.nombrec)==true);
+  do
+   {cout<<"\n Introduzca sus apellido: ";
+    getline(cin, registro.apellidoc);
+   }
+    do
+      {cout << "\n Ingrese el Email: ";
+       getline(cin, registro.correoc);
+      }while(verificarCorreo(registro.correoc)==true);
+    do
+      {cout<<"\n Ingrese una contraseña con caracteres numericos: ";
+	   cin>>registro.contrasenac;
+      }while(validar_numeros(registro.contrasenac)==true);
+    for(int i=0;i<INT;i++)
+      {do
+	    {cout<<"\n-----------INTERESES------------";
+         cout<<"\n [1] Naturaleza/Resorts";
+         cout<<"\n [2] Parques";
+         cout<<"\n [3] Comida";
+         cout<<"\n [4] Cine/Teatro";
+         cout<<"\n [5] Fiesta/Diversion";
+         cout<<"\n [6] Otros";
+         cout<<"\n--------------------------------";
+	     cout<<"\n Elija un interes: ";
+	     cin>>registro.cont[i];
+		}while(registro.cont[i]<0 || registro.cont[i]>3);
+      }
+    registro.estadoc = 0;
+    fwrite(&registro,sizeof(registro),1,ptr);
+    }
+ else
+	{cout<<"\n Usted debe ser mayor de 12 años para usar FIND PLACE";
+    }
+ fclose(ptr);
+}
+
+
+
+void registro_propietario()
+{FILE *ptr;
+ ptr = fopen("propietario.dat","ab");
+ do
+   {do
+      {cout<< "\n Introduzca su ID: ";
+       cin>>registrro.IDp[M];
+	  }while(validarnumeroentero (registrro.IDp[M])==true);   
+   }while(verifexisteidpopietario(registrro.IDp[M])==true);
+ do
+   {cout<<"\n Introduzca el NIT de su establecimiento: ";
+    cin>>registrro.NITp;
+   }while(validarnumeroentero (registrro.NITp)==true);
+ cout << "\n Introduzca el nombre de su establecimiento: ";
+ getline(cin,registrro.establecimientop);
+ cout<<"\n Introduzca la descipcion de su establecimiento: ";
+ getline(cin, registrro.descripcionp);
+ do
+   {cout<<"\n Ingrese la fecha de su subscripcion: ";
+   }while(verificacionfecha(registro.fechac[10])==true);
+ do
+   {cout << "\n Ingrese el Email: ";
+    getline(cin, registro.correoc);
+   }while(verificarCorreo(registro.correoc)==true);
+ do
+  {cout<<"\n Ingrese su numero de celular: ";
+   cin>>registrro.telefonop;
+  }while(verificar_telefono(registrro.telefonop)==true);
+  do
+      {cout<<"\n-----------INTERESES------------";
+       cout<<"\n [1] Naturaleza/Resorts";
+       cout<<"\n [2] Parques";
+       cout<<"\n [3] Comida";
+       cout<<"\n [4] Cine/Teatro";
+       cout<<"\n [5] Fiesta/Diversion";
+       cout<<"\n [6] Otros";
+       cout<<"\n--------------------------------";
+	   cout<<"\n Elija el interes al cual pertenece su establecimiento: ";
+	   cin>>registrro.interes;
+	  }while(registrro.interes<0 ||registrro.interes>6);
+  do
+    {cout<<"\n Ingrese una contraseña con caracteres numericos: ";
+	 cin>>registrro.contrasenap;
+	}while(validar_numeros(registrro.contrasenap)==true);
+ do
+    {cout<<"\n Ingrese la categoria a la que pertenece su establecimiento";
+	 cout<<"\n [1]  Microempresa";
+	 cout<<"\n [2]  Macroempresa";
+	 cout<<"\n [3]  Mediana Empresa";
+	 cout<<"\n [4]  Gobierno Municipal";
+	 cin>> registrro.categoria;
+	}
+ registrro.estadop = 0;
+ fwrite(&registro,sizeof(registro),1,ptr);
+ fclose(ptr);
+}
+
+void registro_gerente()
+{int ID, contrasena;
+do
+{cout<<"\n Ingrese su ID: ";
+ cin>> administrador.ID;
+}while(validarnumeroentero(administrador.ID)==true);
+do
+{cout<<"\n Ingrese su contrasena: ";
+ cin>> administrador.contrasena;
+}while(validarnumeroentero(administrador.contrasena)==true);
+
+}
+
+void inicio_cliente()
+{int ID, contrasena, opc1, opc2, opc3, opc4, opc5;
+ cout<<"\n Ingrese su ID: ";
+ cin>>ID;
+ cout<<"\n Ingrese su contrasena: ";
+ cin>>contrasena;
+
+ if(ingreso_contrasena(ID, contrasena)==false)
+   {FILE *ptr;
+    ptr = fopen("cliente.dat","rb+");
+ ´  do
+     {cout<<"\n [1]  Perfil";
+	  cout<<"\n [2]  Intereses";
+	  cout<<"\n [3]  Lugares";
+	  cout<<"\n [0]  Salir";
+	  cout<<"\n Ingrese una opcion";
+	  cin>>opc1;
+	  switch(opc1)
+	    {case 1:
+	        {do
+		       {cout<<"\n [1] Mostrar perfil";
+			    cout<<"\n [2] Modificar perfil";
+			    cout<<"\n [3] Borrar datos";
+			    cout<<"\n [4] Adicionar datos";
+			    cout<<"\n [0]  Salir";
+				cout<<"\n Ingrese una opcion";
+			    cin>>opc2;
+			    switch(opc2)
+			      {case 1: mostrar_perfil_cliente(); break;
+				   case 2: modificar_perfil_cliente(); break;
+				   case 3: borrar_datos_cliente(); break;
+				   case 4: adicionar_datos_cliente(); break;
+				   case 0: cout<<"\n Salir";
+				   default: cout<<"\n ERROR";
+			      }
+		       }while(opc=!0);
+	        }
+		 break;
+		 case 2:
+			{do
+		       {cout<<"\n [1] Mostrar Intereses";
+			    cout<<"\n [2] Modificar Intereses";
+			    cout<<"\n [3] Borrar datos";
+			    cout<<"\n [0] Salir";
+				cout<<"\n Ingrese una opcion";
+			    cin>>opc3;
+			    switch(opc3)
+			      {case 1: mostrar_interes_cliente(); break;
+				   case 2: modificar_interes_cliente(); break;
+				   case 3: borrar_interes_cliente(); break;
+				   case 0: cout<<"\n Salir";
+				   default: cout<<"\n ERROR";
+			      }
+		       }while(opc!=0);
+	        }
+		 break;
+		 case 3:mostrar_lugares_cliente(); break;
+		 case 0: cout<<"\n Salir"; break;
+		 default: cout<<"\n ERROR";
+		}
+    }while(opc1!=0);
+ else
+   {cout<<"\n ERROR: Los datos no coinciden";
+   }
+}
+
+
+void inicio_propietario()
+{int ID, contrasena,opc1, opc2, opc3;
+ cout<<"\n Ingrese su ID: ";
+ cin>>ID;
+ cout<<"\n Ingrese su contrasena: ";
+ cin>>contrasena;
+ if(ingreso_contrasena(ID, contrasena)==false)
+ {FILE *ptr;
+  ptr = fopen("propietario.dat","rb+");
+   do
+   {cout<<"\n [1] perfil";
+    cout<<"\n [2] consumidor";
+    cout<<"\n [3] Base de datos";
+	cout<<"\n [0] Salir";
+	cout<<"\n Ingrese una opcion: ";
+	cin>>opc1;
+	switch(opc1)
+	  {case 1: 
+	        {do
+			   {cout<<"\n [1] Mostrar";
+			    cout<<"\n [2] Modificar";
+				cout<<"\n [3] Borrar";
+				cout<<"\n [0] Salir";
+				cout<<"\n Ingrese una opcion: ";
+				cin>>opc2;
+				switch(opc2)
+				  {case 1: mostrar_perfil_propietario(); break;
+				   case 2: modificar_perfil_propietario(); break;
+				   case 3: borrar_perfil_propietario(); break();
+				   case 0: cout<<"\n Salir";
+				  }
+			   }while(opc2<0 || opc2>3);
+			}break;
+	  case 2:mostrar_consumidores_propietario;break;
+	  case 3:
+		  {do
+		    {cout<<"\n [1] Pagos";
+			  cout<<"\n [2] Deudas";
+			  cout<<"\n Salir";
+			  switch(opc3)
+			  {case 1: pagos_propietario();
+			   case 2: deudas_propietario();
+			   case 0: cout<<"\ Salir";
+			  }
+			}while(opc3<0 || opc3>2);
+		  }break;
+	  case 0:cout<<"\n Salir";break;
+	  default: cout<<"\ ERROR ";
+	  }
+   }
+ }
+ else
+ {cout<<"\n ERROR: Los datos no coinciden";
+ }
+}
+
+void inicio_gerente()
+{int ID, contrasena,opc1, opc2, opc3, opc4;
+ cout<<"\n Ingrese su ID: ";
+ cin>>ID;
+ cout<<"\n Ingrese su contrasena: ";
+ cin>>contrasena;
+if(ingreso_contrasena(ID, contrasena)==false)
+  {FILE *ptr;
+   ptr = fopen("gerente.dat","rb+");
+   do
+    {cout<<"\n----------------------------";
+	 cout<<"\n [1] Lugares";
+	 cout<<"\n [2] Usuarios";
+	 cout<<"\n [3] Intereses";
+	 cout<<"\n [4] Base de datos";
+	 cout<<"\n Salir";
+	 cout<<"\n Seleccione una opcion";
+	 cin>>opc1;
+	 switch(opc1)
+	      {case 1:{do
+	                {cout<<"\n [1] Listar";
+	                 cout<<"\n [2] Consultar";
+				     cout<<"\n [3] Borrar";
+				     cout<<"\n [0] Salir";
+				     cout<<"\n Seleccione una opcion: ";
+				     cin>>opc2;
+				     switch(opc2)
+				         {case 1:listar_lugares();
+					          break;
+						  case 2: consultar_lugares();
+						      break;
+						  case 3:borrar_lugares();
+							  break;
+						  case 0: cout<<"\n Salir";
+							  break;
+					     }
+					}while(opc2<0 || opc2>3);
+	              }break;
+
+		   case 2:{do
+				    {cout<<"\n [1] Listar";
+					 cout<<"\n [2] Consultar";
+					 cout<<"\n [0] Salir";
+					 cout<<"\n Seleccione una opcion: ";
+					 cin>>opc3;
+					 switch(opc3)
+					  {case 1: listar_usuarios();
+                               break;
+					   case 2: consultar_usuarios();
+						       break;
+					   case 3: cout<<"\n Salir";
+					           break;
+					  }
+					}while(opc3<0 || opc3>2);
+				  }
+				  break;
+		   case 3:{do
+			        {cout<<"\n [1] Listar";
+			         cout<<"\n [2] Modificar datos";
+				     cout<<"\n [3] Consultar";
+				     cout<<"\n [4] Salir";
+				     cout<<"\n Seleccione una opcion: ";
+				     cin>>opc4;
+				     switch(opc4)
+				      {case 1: listar_intereses(); break;
+					   case 2: modificar_datosintereses(); break;
+					   case 3: consultar_intereses(); break;
+					   case 4: cout<<"\n Salir";
+				      }
+				  }while(opc4<0 || opc4>4);
+				  break;
+		   case 4: {do
+				     {//FALTA//
+					 }
+				   }break;
+		   case 0:cout<<"\n Salir";
+				  break;
+		   default: cout<<"\n ERROR";
+                   break;
+	      }
+    }while(opc2!=0);
+  }
+ else
+   {cout<<"\n ERROR: Los datos no coinciden";
+   }
+}
+
+// VALIDACION FECHAS//
+
+
+bool fechanacimiento(string fecha)
+{
+ bool K=true; 
+
+ if((fecha.at(2)=='/') && (fecha.at(5)=='/'))
+	{
+	 int dd=(atoi(fecha.substr(0,2).c_str()));
+	 int mm=(atoi(fecha.substr(3,2).c_str()));
+	 int aa=(atoi(fecha.substr(6,4).c_str()));
+	 if(mm<=12 && mm>0)
+	   {if(mm==1 || mm==3 || mm==5 || mm==7 || mm==8 || mm==10 || mm==12)
+		  { if(dd>=1  || dd<=31)
+			  {if(verificarhoy( dd, mm, aa)==false)
+				   {K=false;
+				   }
+		      } 
+		  }
+		else 
+		   {if(mm==4 || mm==6|| mm==9|| mm==11)
+			   {if(dd>=1  || dd<=30)
+				 {if(verificarhoy( dd, mm, aa)==false)
+					 {K=false;
+	                 }
+				 } 
+		       }
+		    else 
+			   {if(aa%4==0 && (aa%100!=100) || (aa%400==0 ))
+				   {if(dd>=1 ||  dd<=29)
+					   {if(verificarhoy( dd, mm, aa)==false)
+						  {K=false;
+	                      }
+		               }
+		           }
+			     else
+				    {if(dd<=1 && dd<=28)
+					   {if(verificarhoy( dd, mm, aa)==false)
+					      {K=false;
+					      }
+		               }
+		            }
+	            }
+	        }
+	   }
+return K;
+}
+
+bool verificarhoy(int dd, int mm, int aa)
+{bool z=true;  
+if(fechanacimiento(fecha)==false)
+	{int dd1=FechaDia();
+	 int mm1= FechaMes();
+	 int aa1=FechaAnho();
+	 if (aa1-aa>12) 
+		return false;
+	else
+		if (aa1-aa==12)
+			if (mm1>mm)
+				return false;
+			else
+		      if(mm1==mm)
+				 if	(dd1>=dd)
+					return false;
+	return z;
+	
+}
+
+int FechaAnho() 
+{
+	time_t tSac = time(NULL);  // instante actual
+	struct tm* pt1 = localtime (&tSac);
+	return((pt1->tm_year+1900));
+
+}
+
+int FechaMes()
+{
+	time_t tSac = time(NULL);  // instante actual
+	struct tm* pt1 = localtime (&tSac);
+	return((pt1->tm_mon+1));
+
+}
+
+int FechaDia() 
+{
+	time_t tSac = time(NULL);  // instante actual
+	struct tm* pt1 = localtime (&tSac);
+	return((pt1->tm_mday));
+
+}
+
+bool validarnumeroentero (string X)
+{bool k = true;
+ int i=0, cont=0; 
+ for(i=0;i< X.length(); i++);
+   {if(isdigit(X[i]))
+	  {cont++;
+      }
+  
+   }
+
+ if(cont==X.length())
+    k = false;
+  return k;
+}
+
+bool validarletras (string X)
+{bool k = true;
+ int i=0, cont=0; 
+ for(i=0;i< X.length(); i++);
+  {if(isalpha(X[i]) !=' ' || X[i] == ' ')
+	  {cont++;
+      }
+    
+  }
+  
+ if(cont==X.length())
+    k = false;
+ return k;
+}
+
+/*bool verificarCorreo(string correo);
+{
+	int n = strlen(cad), i ,arr = 0, punto = 0;
+	for(i  =0; i < n; i++)
+	{
+		if(cad[i] != '@' && cad[i] != '.' && cad[i] != '_'&& cad[i] != '-')
+			if(cad[i] != -92 && cad[i] != -91)
+				if(!((cad[i] > 96 && cad[i] < 123) || (cad[i] > 64 && cad[i] < 91)))
+					return false;
+		if(cad[i] == '@')
+			arr++;
+		if(cad[i] == '.')
+			punto++;
+	}
+	if(punto  >0)
+		if(arr == 1)
+			return true;
+	return false;
+}
+/*
