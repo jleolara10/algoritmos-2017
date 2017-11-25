@@ -1,0 +1,139 @@
+#include "stdafx.h"
+#include <iostream>
+#include "conio.h"
+#include <string>
+#include "stdlib.h"
+
+using namespace std;
+void ALTA_SECUENCIAL(void);
+void LISTADO_SECUENCIAL(void);
+
+struct t_lugar
+{
+	int no_lugar;
+	string descrip;
+	string ubicacion;
+	float precio;
+	int oferta;
+    char garantia;
+};
+
+t_lugar Registro;
+FILE *PLACE;
+
+void main()
+{
+	int op;
+	do
+	{
+		cout<<"              MENU          "<<endl;
+		cout<<"(1) Adicionar-Insertar"<<endl;
+		cout<<"(2) Listado"<<endl;
+		cout<<"(3) Modificacion"<<endl;
+		cout<<"(4) Consulta"<<endl;
+		cout<<"(5) Borrado"<<endl;
+		cout<<"(0) Salir"<<endl;
+		cout<<endl;
+		cout<<"Ingrese la opcion que desea: ";
+		cin>>op;
+		switch(op)
+		{
+		case 1:
+			{
+				ALTA_SECUENCIAL();
+				break;
+			}
+		case 2:
+			{
+				LISTADO_SECUENCIAL();
+				break;
+			}
+		
+		case 0:
+			{
+				cout<<"Salir";
+				break;
+			}
+		default:
+			{
+			}
+		}
+		cout<<endl;
+	}while(op!=0);
+	ALTA_SECUENCIAL();
+	LISTADO_SECUENCIAL();
+	getch();
+
+}
+void ALTA_SECUENCIAL(void) //
+{ 
+	
+  int no_lugar;  // Variable local para el numero de producto 
+ 
+  cout << "\n\rALTAS DE REGISTROS DE LUGARES"; 
+  PLACE=fopen("LUGAR.SEC","rb+"); // Intenta abrir el archivo  
+                                     // en modo de lectura/escritura 
+  if(PLACE==NULL) 
+  PLACE=fopen("LUGAR.SEC","wb"); // Crea el archivo en caso de no // existir 
+  cout << "\n\n\n\rNumero de lugar: "; 
+  cin >> no_lugar; 
+  fread(&Registro,sizeof(Registro),1,PLACE); // Lee el "Registro", de tamano=sizeof(Registro) del archivo "PLACE" 
+  while(!feof(PLACE)) // Ciclo mientras no se encuentre el final del 
+                      // archivo 
+  { 
+    if(Registro.no_lugar==no_lugar) 
+    { 
+       cout << "\n\n\n\rRegistro duplicado !!!"; 
+       fclose(PLACE); 
+       getch(); 
+       return; 
+    } 
+    fread(&Registro,sizeof(Registro),1,PLACE); 
+  } 
+  cin.ignore();
+  cout << "\n\rDescripcion: "; getline(cin,Registro.descrip); 
+  cout << "\n\rUbicacion: "; getline(cin,Registro.ubicacion);
+  cout << "\n\rPrecio     : "; cin >> Registro.precio;
+  cout << "\n\rOferta   : "; cin >> Registro.oferta; 
+  do 
+  { 
+    cout << "\n\rGarantia   : ";
+	Registro.garantia=toupper(getche()); 
+
+  }while(Registro.garantia!='S' && Registro.garantia!='N'); 
+
+  Registro.no_lugar=no_lugar; 
+  fwrite(&Registro,sizeof(Registro),1,PLACE); // Grabar el Registro  
+  fclose(PLACE); // Cierra el archivo 
+  cout << "\n\n\n\rlugar registrado !!!"; 
+  cout << "\n\r<<< Oprima cualquier tecla para continuar >>>"; 
+  getch(); 
+  return; 
+} 
+void LISTADO_SECUENCIAL(void) 
+{ 
+  cout << "\n\rLISTADO DE REGISTROS DE LUGARES"; 
+  PLACE=fopen("LUGAR.SEC","rb"); // Intenta abrir el archivo LUGAR.SEC
+                             // en modo de solo lectura 
+  if(PLACE==NULL) 
+  { 
+    cout << "\n\n\n\rNo existe el archivo !!!"; 
+    cout << "\n\r<<< Oprima cualquier tecla para continuar >>>"; 
+    getch(); 
+    return; 
+  } 
+  cout<< "\n\rNo Prod       Descripcion      Ubicacion      Precio         Oferta     Garantia"<<endl; 
+  cout << "\n\r---------------------------------------------------------"<<endl; 
+  fread(&Registro,sizeof(Registro),1,PLACE); // Lee el "Registro", de tamano=sizeof(Registro) del archivo "PLACE"
+  while(!feof(PLACE)) // Ciclo mientras no se encuentre el final del archivo 
+  { 
+    cout<<Registro.no_lugar<<"\t""\t"<<Registro.descrip<<"\t""\t"<<Registro.ubicacion<<"\t""\t"<<Registro.precio<<"\t""\t"<<Registro.oferta<<"\t""\t"<<Registro.garantia<<endl; 
+    fread(&Registro,sizeof(Registro),1,PLACE); 
+  } 
+  fclose(PLACE); // Cierra el archivo 
+  cout << "\n\r---------------------------------------------------------"; 
+  cout << "\n\rFin del listado !!!"; 
+  cout << "\n\r<<< Oprima cualquier tecla para continuar >>>"; 
+  getch(); 
+  return; 
+}
