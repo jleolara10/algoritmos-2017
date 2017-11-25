@@ -1,0 +1,233 @@
+#include "stdafx.h"
+#include <iostream>
+#include "conio.h"
+#include <string>
+#include "stdlib.h"
+
+using namespace std;
+void ALTA_SECUENCIAL(void);
+void LISTADO_SECUENCIAL(void); 
+void CONSULTA_SECUENCIAL(void);
+void ALTA_DIRECTA(void);
+void LISTADO_SECUENCIAL_CLIENTES(void);
+struct tipo_registroReserva{
+	int idReserva;
+	string nombreReserva;
+	string nombreDpto;
+	int extensionReserva;
+};
+
+struct tipo_registroCliente{
+	int idCliente;
+	string nombreCliente;
+	int cantidadReservas;
+};
+
+tipo_registroReserva Registro;
+tipo_registroCliente RegistroCliente;
+FILE *alias;
+
+void main()
+{
+	int op;
+	do
+	{
+		cout<<"              MENU          "<<endl;
+		cout<<"(1) Adicionar-Insertar"<<endl;
+		cout<<"(2) Listado"<<endl;
+		cout<<"(3) Consulta"<<endl;
+		cout<<"(4) Adicionar-Insertar Cliente"<<endl;
+		cout<<"(5) Listado Clientes"<<endl;
+		cout<<"(0) Salir"<<endl;
+		cout<<endl;
+		cout<<"Ingrese la opcion que desea: ";
+		cin>>op;
+		switch(op){
+			case 1:
+				{
+					ALTA_SECUENCIAL();
+					break;
+				}
+			case 2:
+				{
+					LISTADO_SECUENCIAL();
+					break;
+				}
+			case 3:
+				{
+					CONSULTA_SECUENCIAL();
+					break;
+				}
+			case 4:
+				{
+					ALTA_DIRECTA();
+					break;
+				}
+			case 5:
+				{
+					LISTADO_SECUENCIAL_CLIENTES();
+					break;
+				}
+			case 0:
+				{
+					cout<<"Salir";
+					break;
+				}
+			default:
+				{
+				}
+		}
+		cout<<endl;
+	}while(op!=0);
+	getch();
+}
+void ALTA_SECUENCIAL(void){ 
+	int idReserva;  // Variable local para el numero de producto 
+	cout << "\n\rALTAS DE REGISTROS DE Reservas Naturales"; 
+	alias=fopen("RESERVA.SEC","rb+"); // Intenta abrir el archivo  
+                                     // en modo de lectura/escritura 
+	if(alias==NULL) 
+    alias=fopen("RESERVA.SEC","wb"); // Crea el archivo en caso de no existir 
+	cout << "\n\n\n\rNumero de Reserva: "; cin >> idReserva; 
+	fread(&Registro,sizeof(Registro),1,alias); 
+  // Lee el "Registro", de tamano=sizeof(Registro) del archivo "alias" 
+	while(!feof(alias)) // Ciclo mientras no se encuentre el final del 
+                      // archivo 
+	{ 
+		if(Registro.idReserva==idReserva) { 
+			cout << "\n\n\n\rRegistro duplicado !!!"; 
+			fclose(alias); 
+		getch(); 
+		return; 
+		} 
+		fread(&Registro,sizeof(Registro),1,alias); 
+	} 
+	cin.ignore();
+	cout << "\n\rNombre de Reserva: "; getline(cin,Registro.nombreReserva); 
+	cout << "\n\rNombre de Dpto   : "; getline (cin,Registro.nombreDpto); 
+	cout << "\n\rExtension     : "; cin >> Registro.extensionReserva; 
+	Registro.idReserva=idReserva; 
+	fwrite(&Registro,sizeof(Registro),1,alias); // Grabar el Registro  
+	fclose(alias); // Cierra el archivo 
+	cout << "\n\n\n\rDatos de Reserva Registrados !!!"; 
+	cout << "\n\r<<< Oprima cualquier tecla para continuar >>>"; 
+	getch(); 
+	return; 
+} 
+
+void LISTADO_SECUENCIAL(void) { 
+	cout << "\n\rLISTADO DE REGISTROS DE RESERVAS NATURALES"; 
+	alias=fopen("RESERVA.SEC","rb"); // Intenta abrir el archivo PRODUCTO.SEC
+                             // en modo de solo lectura 
+	if(alias==NULL){ 
+		cout << "\n\n\n\rNo existe el archivo !!!"; 
+		cout << "\n\r<<< Oprima cualquier tecla para continuar >>>"; 
+		getch(); 
+		return; 
+	} 
+	cout<< "\n\rID_Reserva         NombreReserva         NombreDpto         Extension(km2)         "<<endl; 
+	cout << "\n\r------------------------------------------------------------------------------"<<endl; 
+	fread(&Registro,sizeof(Registro),1,alias); 
+     // Lee el "Registro", de tamano=sizeof(Registro) del archivo "alias"
+	while(!feof(alias)) // Ciclo mientras no se encuentre el final del archivo 
+	{ 
+		cout<<Registro.idReserva<<"\t""\t"<<Registro.nombreReserva<<"\t""\t"<<Registro.nombreDpto<<"\t""\t"<<Registro.extensionReserva<<"\t""\t"<<endl; 
+		fread(&Registro,sizeof(Registro),1,alias); 
+	} 
+	fclose(alias); // Cierra el archivo 
+	cout << "\n\r------------------------------------------------------------------------------"; 
+	cout << "\n\rFin del listado !!!"; 
+	cout << "\n\r<<< Oprima cualquier tecla para continuar >>>"; 
+	getch(); 
+	return; 
+}
+
+void CONSULTA_SECUENCIAL(void){ 
+	int idReserva; 
+	cout << "\n\rCONSULTA DE REGISTROS DE PRODUCTOS"; 
+	alias=fopen("RESERVA.SEC","rb"); // Intenta abrir el archivo PRODUCTO.SEC 
+                             // en modo de solo lectura 
+	if(alias==NULL){ 
+		cout << "\n\n\n\rNo existe el archivo !!!"; 
+		cout << "\n\r<<< Oprima cualquier tecla para continuar >>>"; 
+		getch(); 
+		return; 
+	} 
+	cout << "\n\n\n\rNumero de Reserva: "; cin >> idReserva; 
+	fread(&Registro,sizeof(Registro),1,alias);   // Lee el "Registro", de tamano=sizeof(Registro) del archivo "alias" 
+	while(!feof(alias))  { 
+		if(Registro.idReserva==idReserva){ 
+			cout << "\n\rID_Reserva         NombreReserva         NombreDpto         Extension(km2)               "; 
+			cout << "\n\r--------------------------------------------------------------------------------  "; 
+			cout<<Registro.idReserva<<"\t""\t"<<Registro.nombreReserva<<"\t""\t"<<Registro.nombreDpto<<"\t""\t"<<Registro.extensionReserva<<"\t""\t"<<endl; 
+			fclose(alias); 
+			cout << "\n\r<<< Oprima cualquier tecla para continuar >>>"; 
+			getch(); 
+			return; 
+		} 
+		fread(&Registro,sizeof(Registro),1,alias); 
+	} 
+	cout << "\n\rNo se encuentra ese registro !!!"; 
+	fclose(alias); // Cierra el archivo 
+	cout << "\n\r<<< Oprima cualquier tecla para continuar >>>"; 
+	getch(); 
+	return; 
+}
+
+void ALTA_DIRECTA(void) { 
+	int idCliente,dir_fisica;  // Variable local para el numero de producto 
+	cout << "\n\rALTAS DE REGISTROS DE PRODUCTOS"; 
+	alias=fopen("CLIENTE.SEC","rb+"); // Intenta abrir el archivo PRODUCTO.DIR en modo de lectura/escritura 
+	if(alias==NULL) 
+		alias=fopen("CLIENTE.SEC","wb"); // Crea el archivo en caso de no existir 
+	cout << "\n\n\n\rID del Cliente: "; 
+	cin >> idCliente; 
+	dir_fisica=idCliente*sizeof(RegistroCliente); // Calculo de la dir. fisica 
+	fseek(alias,dir_fisica,SEEK_SET); //Posicionar el apuntador del archivo
+	fread(&RegistroCliente,sizeof(RegistroCliente),1,alias); // Lee el "Registro", de tamano=sizeof(Registro) del archivo "alias"
+	if(RegistroCliente.idCliente==idCliente) { 
+		cout << "\n\n\n\rRegistro duplicado !!!"; 
+		fclose(alias); 
+		getch(); 
+		return; 
+	} 
+	cin.ignore();
+	cout << "\n\rNombre Cliente: ";
+	getline(cin,RegistroCliente.nombreCliente);
+	cout << "\n\rCantidad De Reservas : "; 
+	cin >> RegistroCliente.cantidadReservas;
+	RegistroCliente.idCliente=idCliente; 
+	fseek(alias,dir_fisica,SEEK_SET); //Posicionar el apuntador del archivo
+	fwrite(&RegistroCliente,sizeof(RegistroCliente),1,alias); // Grabar el Registro completo 
+	fclose(alias); // Cierra el archivo 
+	cout << "\n\n\n\rProducto registrado !!!"; 
+	cout << "\n\r<<< Oprima cualquier tecla para continuar >>>"; 
+	getch(); 
+	return; 
+}
+void LISTADO_SECUENCIAL_CLIENTES(void) { 
+	cout << "\n\rLISTADO DE REGISTROS DE RESERVAS NATURALES"; 
+	alias=fopen("CLIENTE.SEC","rb"); // Intenta abrir el archivo PRODUCTO.SEC
+                             // en modo de solo lectura 
+	if(alias==NULL){ 
+		cout << "\n\n\n\rNo existe el archivo !!!"; 
+		cout << "\n\r<<< Oprima cualquier tecla para continuar >>>"; 
+		getch(); 
+		return; 
+	} 
+	cout<< "\n\rID_Cliente            NombreCliente            Nro de Reservas                 "<<endl; 
+	cout << "\n\r------------------------------------------------------------------------------"<<endl; 
+	fread(&RegistroCliente,sizeof(RegistroCliente),1,alias); 
+     // Lee el "Registro", de tamano=sizeof(Registro) del archivo "alias"
+	while(!feof(alias)) // Ciclo mientras no se encuentre el final del archivo 
+	{ 
+		cout<<RegistroCliente.idCliente<<"\t""\t"<<RegistroCliente.nombreCliente<<"\t""\t"<<RegistroCliente.cantidadReservas<<"\t""\t"<<endl; 
+		fread(&RegistroCliente,sizeof(RegistroCliente),1,alias); 
+	} 
+	fclose(alias); // Cierra el archivo 
+	cout << "\n\r------------------------------------------------------------------------------"; 
+	cout << "\n\rFin del listado !!!"; 
+	cout << "\n\r<<< Oprima cualquier tecla para continuar >>>"; 
+	getch(); 
+	return; 
+}
